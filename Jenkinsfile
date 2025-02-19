@@ -33,8 +33,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deployment commands (you can customize this step for your environment)
-                    // Example deployment using SSH or Kubernetes
+                    // Example deployment command
                     // sh "ssh user@production_server 'docker run -d -p 9600:80 --name mediastream-container mediastream-image'"
                 }
             }
