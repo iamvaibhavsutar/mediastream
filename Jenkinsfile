@@ -1,65 +1,47 @@
 pipeline {
     agent any
-
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                script {
-                    // Cloning the repository
-                    checkout scm
-                }
+                checkout scm
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image from Dockerfile
-                    sh 'docker build -t mediastream-image .'
+                    sh 'sudo docker build -t mediastream-image .'
                 }
             }
         }
-
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Run the container
-                    sh 'docker run -d -p 9600:8000 mediastream-image'
+                    sh 'sudo docker run -d -p 9600:80 --name mediastream-container mediastream-image'
                 }
             }
         }
-
         stage('Test') {
             steps {
                 script {
-                    // Run tests or any other tasks here
-                    echo "Run tests here"
+                    sh 'curl -f http://localhost:9600/health' // Adjust this URL as per your app
                 }
             }
         }
-
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy to your environment, e.g., AWS, Kubernetes, etc.
-                    echo "Deploying the app..."
+                    // Example deployment using SSH or Kubernetes
+                    // sh 'ssh user@production_server "docker run -d -p 9600:80 --name mediastream-container mediastream-image"'
                 }
             }
         }
-    }
-
-    post {
-        always {
-            // Clean up after the pipeline is done
-            echo "Cleaning up..."
-        }
-
-        success {
-            echo "Pipeline completed successfully!"
-        }
-
-        failure {
-            echo "Pipeline failed!"
+        stage('Cleanup') {
+            steps {
+                script {
+                    sh 'sudo docker rm -f mediastream-container'
+                    sh 'sudo docker rmi mediastream-image'
+                }
+            }
         }
     }
 }
