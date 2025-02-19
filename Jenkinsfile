@@ -18,8 +18,8 @@ pipeline {
         
         stage('Clone Repository') {
             steps {
-                // Ensure you're cloning the correct repository
-                git url: 'https://github.com/iamvaibhavsutar/mediastream.git', credentialsId: 'your-credentials-id'
+                // Ensure you're using the correct branch
+                git url: 'https://github.com/iamvaibhavsutar/mediastream.git', branch: 'main', credentialsId: 'your-credentials-id'
             }
         }
         
