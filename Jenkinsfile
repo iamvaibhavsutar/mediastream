@@ -28,10 +28,14 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                branch 'main'  // Change to the appropriate branch name
+            }
             steps {
-                // Add deployment steps as needed
-                // Example:
-                // sh "ssh user@production_server 'docker run -d -p 9600:80 --name mediastream-container mediastream-image'"
+                // Example deploy steps for the 'main' branch
+                sh '''#!/bin/bash
+                echo "Deploying to production..."
+                '''
             }
         }
         stage('Cleanup') {
