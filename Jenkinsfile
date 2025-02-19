@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Define environment variables here if needed, like credentials for Docker or AWS
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -45,25 +41,4 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy to your environment, e.g., AWS, Kubernetes, etc.
-                    echo "Deploying the app..."
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            // Clean up after the pipeline is done
-            echo "Cleaning up..."
-        }
-
-        success {
-            echo "Pipeline completed successfully!"
-        }
-
-        failure {
-            echo "Pipeline failed!"
-        }
-    }
-}
+                    // Deploy to your environment, e.
