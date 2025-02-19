@@ -31,8 +31,8 @@ pipeline {
         stage('Build Frontend Docker Image') {
             steps {
                 script {
-                    // Build Docker image for the frontend
-                    sh 'docker build -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_IMAGE_TAG} frontend/'
+                    // Build Docker image for the frontend, using the correct path
+                    sh 'docker build -t ${DOCKER_IMAGE_FRONTEND}:${DOCKER_IMAGE_TAG} /home/vaibhav/programs/mediastream-hub/frontend/'
                     sh 'docker tag ${DOCKER_IMAGE_FRONTEND}:${DOCKER_IMAGE_TAG} ${DOCKER_IMAGE_FRONTEND}:${DOCKER_IMAGE_TAG}'
                 }
             }
