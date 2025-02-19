@@ -2,19 +2,13 @@ pipeline {
     agent any
     
     environment {
-        DOCKER_IMAGE_NAME = 'mediastream-hub'
+        DOCKER_IMAGE_NAME = 'vaibhav411007/mediastream-hub'
         DOCKER_IMAGE_TAG = 'latest'
-        K8S_NAMESPACE = 'your-namespace'
+        K8S_NAMESPACE = 'default'  // Update with your actual namespace if different
     }
     
     stages {
-        stage('Declarative: Checkout SCM') {
-            steps {
-                checkout scm
-            }
-        }
-        
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
                 git url: 'https://github.com/iamvaibhavsutar/mediastream.git', branch: 'main', credentialsId: 'your-credentials-id'
             }
@@ -24,6 +18,7 @@ pipeline {
             steps {
                 script {
                     sh 'docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .'
+                    sh 'docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
                 }
             }
         }
@@ -43,7 +38,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'k8s-kubeconfig', variable: 'KUBE_CONFIG')]) {
-                        sh 'kubectl --kubeconfig=$KUBE_CONFIG set image deployment/${DOCKER_IMAGE_NAME} ${DOCKER_IMAGE_NAME}=${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} --namespace=${K8S_NAMESPACE}'
+                        sh 'kubectl --kubeconfig=$KUBE_CONFIG set image deployment/mediastream-hub mediastream-hub=${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} --namespace=${K8S_NAMESPACE}'
                     }
                 }
             }
@@ -52,10 +47,10 @@ pipeline {
     
     post {
         failure {
-            echo 'Pipeline failed!'
+            echo '❌ Pipeline failed!'
         }
         success {
-            echo 'Pipeline succeeded!'
+            echo '✅ Pipeline succeeded!'
         }
     }
 }
