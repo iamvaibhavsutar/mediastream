@@ -9,8 +9,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build Docker image
-                    sh "sudo docker build -t mediastream-image ."
+                    // Explicitly invoke the shell command
+                    sh '''#!/bin/bash
+                    sudo docker build -t mediastream-image .
+                    '''
                 }
             }
         }
@@ -18,7 +20,9 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container
-                    sh "sudo docker run -d -p 9600:80 --name mediastream-container mediastream-image"
+                    sh '''#!/bin/bash
+                    sudo docker run -d -p 9600:80 --name mediastream-container mediastream-image
+                    '''
                 }
             }
         }
@@ -26,7 +30,9 @@ pipeline {
             steps {
                 script {
                     // Test the application
-                    sh "curl -f http://localhost:9600/health"
+                    sh '''#!/bin/bash
+                    curl -f http://localhost:9600/health
+                    '''
                 }
             }
         }
@@ -42,8 +48,10 @@ pipeline {
             steps {
                 script {
                     // Clean up the resources
-                    sh "sudo docker rm -f mediastream-container"
-                    sh "sudo docker rmi mediastream-image"
+                    sh '''#!/bin/bash
+                    sudo docker rm -f mediastream-container
+                    sudo docker rmi mediastream-image
+                    '''
                 }
             }
         }
