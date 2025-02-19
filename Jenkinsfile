@@ -1,27 +1,69 @@
 pipeline {
     agent any
+
+    environment {
+        // Define environment variables here if needed, like credentials for Docker or AWS
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-repo/mediastream-hub.git'
+                script {
+                    // Cloning the repository
+                    checkout scm
+                }
             }
         }
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t your-dockerhub-username/mediastream-hub:latest .'
+                script {
+                    // Build Docker image from Dockerfile
+                    sh 'docker build -t mediastream-image .'
+                }
             }
         }
-        stage('Push to Docker Hub') {
+
+        stage('Run Docker Container') {
             steps {
-                sh 'docker login -u your-dockerhub-username -p your-password'
-                sh 'docker push your-dockerhub-username/mediastream-hub:latest'
+                script {
+                    // Run the container
+                    sh 'docker run -d -p 9600:8000 mediastream-image'
+                }
             }
         }
-        stage('Deploy to Kubernetes') {
+
+        stage('Test') {
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
+                script {
+                    // Run tests or any other tasks here
+                    echo "Run tests here"
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    // Deploy to your environment, e.g., AWS, Kubernetes, etc.
+                    echo "Deploying the app..."
+                }
             }
         }
     }
-}
 
+    post {
+        always {
+            // Clean up after the pipeline is done
+            echo "Cleaning up..."
+        }
+
+        success {
+            echo "Pipeline completed successfully!"
+        }
+
+        failure {
+            echo "Pipeline failed!"
+        }
+    }
+}
