@@ -17,7 +17,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh '''
+                    // Make sure this block uses correct syntax with closure parameter
+                    sh ''' 
                     docker build -t $DOCKER_IMAGE .
                     '''
                 }
@@ -27,7 +28,8 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh '''
+                    // Make sure this block uses correct syntax with closure parameter
+                    sh ''' 
                     sudo docker run -d -p $PORT:80 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE
                     '''
                 }
@@ -53,8 +55,11 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    sh 'sudo docker stop $DOCKER_CONTAINER_NAME'
-                    sh 'sudo docker rm $DOCKER_CONTAINER_NAME'
+                    // Make sure this block uses correct syntax with closure parameter
+                    sh '''
+                    sudo docker stop $DOCKER_CONTAINER_NAME
+                    sudo docker rm $DOCKER_CONTAINER_NAME
+                    '''
                 }
             }
         }
