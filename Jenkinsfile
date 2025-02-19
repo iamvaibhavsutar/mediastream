@@ -21,8 +21,8 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 script {
-                    // Build Docker image for the backend
-                    sh 'docker build -t ${DOCKER_IMAGE_BACKEND}:${DOCKER_IMAGE_TAG} backend/'
+                    // Build Docker image for the backend, using the correct path
+                    sh 'docker build -t ${DOCKER_IMAGE_BACKEND}:${DOCKER_IMAGE_TAG} /home/vaibhav/programs/mediastream-hub/backend/'
                     sh 'docker tag ${DOCKER_IMAGE_BACKEND}:${DOCKER_IMAGE_TAG} ${DOCKER_IMAGE_BACKEND}:${DOCKER_IMAGE_TAG}'
                 }
             }
