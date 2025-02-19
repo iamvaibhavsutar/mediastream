@@ -13,11 +13,12 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Build Docker Image') {
             steps {
-                script { 
-                    sh ''' 
+                script {
+                    // Execute the shell command to build the Docker image
+                    sh '''#!/bin/bash
                     docker build -t $DOCKER_IMAGE .
                     '''
                 }
@@ -27,7 +28,8 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    sh ''' 
+                    // Run the Docker container
+                    sh '''#!/bin/bash
                     sudo docker run -d -p $PORT:80 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE
                     '''
                 }
@@ -36,7 +38,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                script { 
+                script {
                     // Add your test commands here
                 }
             }
@@ -44,7 +46,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script { 
+                script {
                     // Add your deploy commands here
                 }
             }
@@ -52,8 +54,9 @@ pipeline {
 
         stage('Cleanup') {
             steps {
-                script { 
-                    sh '''
+                script {
+                    // Clean up the Docker container
+                    sh '''#!/bin/bash
                     sudo docker stop $DOCKER_CONTAINER_NAME
                     sudo docker rm $DOCKER_CONTAINER_NAME
                     '''
