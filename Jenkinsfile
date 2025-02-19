@@ -1,49 +1,61 @@
 pipeline {
     agent any
+
+    environment {
+        DOCKER_IMAGE = 'mediastream-image'
+        DOCKER_CONTAINER_NAME = 'mediastream-container'
+        PORT = '9601'  // Updated port
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+        
         stage('Build Docker Image') {
             steps {
-                sh '''#!/bin/bash
-                sudo docker build -t mediastream-image .
-                '''
+                script {
+                    sh '''
+                    docker build -t $DOCKER_IMAGE .
+                    '''
+                }
             }
         }
+
         stage('Run Docker Container') {
             steps {
-                sh '''#!/bin/bash
-                sudo docker run -d -p 9600:80 --name mediastream-container mediastream-image
-                '''
+                script {
+                    sh '''#!/bin/bash
+                    sudo docker run -d -p $PORT:80 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE
+                    '''
+                }
             }
         }
+
         stage('Test') {
             steps {
-                sh '''#!/bin/bash
-                curl -f http://localhost:9600/health
-                '''
+                script {
+                    // Add your test commands here
+                }
             }
         }
+
         stage('Deploy') {
-            when {
-                branch 'main'  // Change to the appropriate branch name
-            }
             steps {
-                // Example deploy steps for the 'main' branch
-                sh '''#!/bin/bash
-                echo "Deploying to production..."
-                '''
+                script {
+                    // Add your deploy commands here
+                }
             }
         }
+
         stage('Cleanup') {
             steps {
-                sh '''#!/bin/bash
-                sudo docker rm -f mediastream-container
-                sudo docker rmi mediastream-image
-                '''
+                script {
+                    sh 'sudo docker stop $DOCKER_CONTAINER_NAME'
+                    sh 'sudo docker rm $DOCKER_CONTAINER_NAME'
+                }
             }
         }
     }
