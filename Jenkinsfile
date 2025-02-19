@@ -41,4 +41,25 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy to your environment, e.
+                    // Deploy to your environment, e.g., AWS, Kubernetes, etc.
+                    echo "Deploying the app..."
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up after the pipeline is done
+            echo "Cleaning up..."
+        }
+
+        success {
+            echo "Pipeline completed successfully!"
+        }
+
+        failure {
+            echo "Pipeline failed!"
+        }
+    }
+}
