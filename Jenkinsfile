@@ -16,8 +16,7 @@ pipeline {
         
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Make sure this block uses correct syntax with closure parameter
+                script { 
                     sh ''' 
                     docker build -t $DOCKER_IMAGE .
                     '''
@@ -28,7 +27,6 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Make sure this block uses correct syntax with closure parameter
                     sh ''' 
                     sudo docker run -d -p $PORT:80 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE
                     '''
@@ -38,7 +36,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                script {
+                script { 
                     // Add your test commands here
                 }
             }
@@ -46,7 +44,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
+                script { 
                     // Add your deploy commands here
                 }
             }
@@ -54,8 +52,7 @@ pipeline {
 
         stage('Cleanup') {
             steps {
-                script {
-                    // Make sure this block uses correct syntax with closure parameter
+                script { 
                     sh '''
                     sudo docker stop $DOCKER_CONTAINER_NAME
                     sudo docker rm $DOCKER_CONTAINER_NAME
