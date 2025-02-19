@@ -1,0 +1,5 @@
+curl -X 'POST' \
+  'http://127.0.0.1:8000/upload/' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@Martin Garrix - MARTIN GARRIX LIVE @ AMF 2024.mp4'
+
