@@ -1,67 +1,27 @@
 pipeline {
     agent any
-
-    environment {
-        DOCKER_IMAGE = 'mediastream-image'
-        DOCKER_CONTAINER_NAME = 'mediastream-container'
-        PORT = '9601'  // Updated port
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git(
-                    url: 'https://github.com/iamvaibhavsutar/mediastream.git', 
-                    credentialsId: 'github-credentials-id' // Update with your credentials ID
-                )
+                git 'https://github.com/your-repo/mediastream-hub.git'
             }
         }
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh '''#!/bin/bash
-                    docker build -t $DOCKER_IMAGE .
-                    '''
-                }
+                sh 'docker build -t your-dockerhub-username/mediastream-hub:latest .'
             }
         }
-
-        stage('Run Docker Container') {
+        stage('Push to Docker Hub') {
             steps {
-                script {
-                    sh '''#!/bin/bash
-                    sudo docker run -d -p $PORT:80 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE
-                    '''
-                }
+                sh 'docker login -u your-dockerhub-username -p your-password'
+                sh 'docker push your-dockerhub-username/mediastream-hub:latest'
             }
         }
-
-        stage('Test') {
+        stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    // Add your test commands here
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                script {
-                    // Add your deploy commands here
-                }
-            }
-        }
-
-        stage('Cleanup') {
-            steps {
-                script {
-                    sh '''#!/bin/bash
-                    sudo docker stop $DOCKER_CONTAINER_NAME
-                    sudo docker rm $DOCKER_CONTAINER_NAME
-                    '''
-                }
+                sh 'kubectl apply -f k8s/deployment.yaml'
             }
         }
     }
 }
+
