@@ -1,0 +1,7 @@
+- name: Deploy MediaStream Hub to Kubernetes
+  hosts: k8s_master
+  become: yes
+  tasks:
+    - name: Apply Kubernetes deployment
+      command: kubectl apply -f /path/to/kubernetes/deployment.yaml
+

@@ -1,0 +1,4 @@
+kubectl delete deployment,pod,svc,secret,configmap,ingress -l app.kubernetes.io/name=grafana -n monitoring
+kubectl delete pvc -l app.kubernetes.io/name=grafana -n monitoring
+kubectl delete secret -l app.kubernetes.io/name=grafana -n monitoring
+
