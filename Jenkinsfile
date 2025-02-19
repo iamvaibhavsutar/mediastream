@@ -16,51 +16,51 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script({ 
+                script {
                     // Execute the shell command to build the Docker image
                     sh '''#!/bin/bash
                     docker build -t $DOCKER_IMAGE .
                     '''
-                })
+                }
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                script({
+                script {
                     // Run the Docker container
                     sh '''#!/bin/bash
                     sudo docker run -d -p $PORT:80 --name $DOCKER_CONTAINER_NAME $DOCKER_IMAGE
                     '''
-                })
+                }
             }
         }
 
         stage('Test') {
             steps {
-                script({
+                script {
                     // Add your test commands here
-                })
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                script({
+                script {
                     // Add your deploy commands here
-                })
+                }
             }
         }
 
         stage('Cleanup') {
             steps {
-                script({
+                script {
                     // Clean up the Docker container
                     sh '''#!/bin/bash
                     sudo docker stop $DOCKER_CONTAINER_NAME
                     sudo docker rm $DOCKER_CONTAINER_NAME
                     '''
-                })
+                }
             }
         }
     }
